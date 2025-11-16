@@ -1,8 +1,32 @@
 package io.github.bitmeshi.stylr;
 
+import java.util.StringJoiner;
+
 final class AnsiCodeGenerator {
     public static String getAnsiPrefix(StyleConfig config) {
-        return getColorTextPrefix(config) + getColorBackgroundPrefix(config) + getAttributePrefix(config);
+        StringJoiner ansiPrefix = new StringJoiner(";", "\u001b[", "m");
+
+        String colorPrefix = getColorTextPrefix(config);
+        String bgColorPrefix = getColorBackgroundPrefix(config);
+        String attributePrefix = getAttributePrefix(config);
+
+        if (colorPrefix.isEmpty() && bgColorPrefix.isEmpty() && attributePrefix.isEmpty()) {
+            return "";
+        }
+
+        if (!colorPrefix.isEmpty()) {
+            ansiPrefix.add(colorPrefix);
+        }
+
+        if (!bgColorPrefix.isEmpty()) {
+            ansiPrefix.add(bgColorPrefix);
+        }
+
+        if (!attributePrefix.isEmpty()) {
+            ansiPrefix.add(attributePrefix);
+        }
+
+        return ansiPrefix.toString();
     }
 
     private static String getColorTextPrefix(StyleConfig config) {
@@ -22,38 +46,38 @@ final class AnsiCodeGenerator {
     }
 
     private static String getAttributePrefix(StyleConfig config) {
-        StringBuilder prefix = new StringBuilder();
+        StringJoiner prefix = new StringJoiner(";");
 
         if (config.isBold()) {
-            prefix.append("\u001b[1m");
+            prefix.add("1");
         }
 
         if (config.isDim()) {
-            prefix.append("\u001b[2m");
+            prefix.add("2");
         }
 
         if (config.isItalic()) {
-            prefix.append("\u001b[3m");
+            prefix.add("3");
         }
 
         if (config.isUnderlined()) {
-            prefix.append("\u001b[4m");
+            prefix.add("4");
         }
 
         if (config.isSlowBlink()) {
-            prefix.append("\u001b[5m");
+            prefix.add("5");
         }
 
         if (config.isRapidBlink()) {
-            prefix.append("\u001b[6m");
+            prefix.add("6");
         }
 
         if (config.isReverse()) {
-            prefix.append("\u001b[7m");
+            prefix.add("7");
         }
 
         if (config.isHide()) {
-            prefix.append("\u001b[8m");
+            prefix.add("8");
         }
 
         return prefix.toString();

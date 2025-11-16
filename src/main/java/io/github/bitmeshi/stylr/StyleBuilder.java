@@ -84,8 +84,13 @@ public final class StyleBuilder {
                 this.isReverse,
                 this.isHide
         );
+
         String ansiPrefix = AnsiCodeGenerator.getAnsiPrefix(config);
 
-        return ansiPrefix + text + "\u001B[0m";
+        if (text.isEmpty()) {
+            return "";
+        }
+
+        return ansiPrefix + text + "\u001b[0m";
     }
 }
