@@ -27,6 +27,6 @@ public enum BasicColor {
 
     public String getAnsiCode(boolean isBackground) {
         int baseCode = isBackground ? 40 : 30;
-        return String.format("\u001b[%dm", baseCode + this.ansiCodeOffset);
+        return String.format("%d", baseCode + this.ansiCodeOffset);
     }
 }
