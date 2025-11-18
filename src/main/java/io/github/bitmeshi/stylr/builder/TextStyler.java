@@ -1,4 +1,6 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.builder;
+
+import io.github.bitmeshi.stylr.internal.AnsiCodeGenerator;
 
 public final class TextStyler extends BaseStyleBuilder<TextStyler> {
     private final String text;

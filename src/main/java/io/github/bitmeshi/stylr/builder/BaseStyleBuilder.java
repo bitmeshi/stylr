@@ -1,8 +1,12 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.builder;
+
+import io.github.bitmeshi.stylr.BasicColor;
+import io.github.bitmeshi.stylr.internal.StyleConfig;
+import io.github.bitmeshi.stylr.internal.color.Rgb;
 
 import java.util.Objects;
 
-public abstract sealed class BaseStyleBuilder<T extends BaseStyleBuilder<T>> permits StyleDefinitionBuilder, TextStyler {
+abstract sealed class BaseStyleBuilder<T extends BaseStyleBuilder<T>> permits StyleDefinitionBuilder, TextStyler {
     protected BasicColor basicColor;
     protected BasicColor bgBasicColor;
     protected Rgb rgbColor;

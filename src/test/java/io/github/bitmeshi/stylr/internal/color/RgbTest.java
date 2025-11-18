@@ -1,4 +1,4 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.internal.color;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

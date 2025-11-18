@@ -1,4 +1,4 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.internal.color;
 
 public record Rgb(int r, int g, int b) {
     public Rgb {

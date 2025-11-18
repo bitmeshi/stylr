@@ -1,5 +1,7 @@
 package io.github.bitmeshi.stylr;
 
+import io.github.bitmeshi.stylr.builder.StyleDefinitionBuilder;
+import io.github.bitmeshi.stylr.builder.TextStyler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
