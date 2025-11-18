@@ -23,8 +23,11 @@ final class AnsiCodeGenerator {
 
     private static String getColorTextPrefix(StyleConfig config) {
         if (config.rgbColor() != null) {
-            Rgb rgb = config.rgbColor();
-            return String.format("38;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
+            return String.format("38;2;%d;%d;%d",
+                    config.rgbColor().r(),
+                    config.rgbColor().g(),
+                    config.rgbColor().b()
+            );
         }
 
         if (config.basicColor() != null) {
@@ -36,8 +39,11 @@ final class AnsiCodeGenerator {
 
     private static String getColorBackgroundPrefix(StyleConfig config) {
         if (config.bgRgbColor() != null) {
-            Rgb rgb = config.bgRgbColor();
-            return String.format("48;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
+            return String.format("48;2;%d;%d;%d",
+                    config.bgRgbColor().r(),
+                    config.bgRgbColor().g(),
+                    config.bgRgbColor().b()
+            );
         }
 
         if (config.bgBasicColor() != null) {

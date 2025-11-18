@@ -1,6 +1,12 @@
 package io.github.bitmeshi.stylr;
 
-record Rgb(int r, int g, int b) {
+public record Rgb(int r, int g, int b) {
+    public Rgb {
+        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+            throw new IllegalArgumentException("RGB values must be between 0 and 255");
+        }
+    }
+
     public static Rgb fromHex(String hex) throws IllegalArgumentException {
         if (!hex.startsWith("#") || (hex.length() != 4 && hex.length() != 7)) {
             throw new IllegalArgumentException("Invalid hexadecimal color format, expected #RGB or #RRGGBB. Got: " + hex);

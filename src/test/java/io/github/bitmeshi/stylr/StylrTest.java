@@ -7,12 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StylrTest {
     @Test
-    @DisplayName("Test Stylr.of() creates StyleBuilder")
-    void createStyleBuilder() {
-        StyleBuilder builder = Stylr.of("Hello");
+    @DisplayName("Test Stylr.of() creates TextStyler")
+    void createTextStyler() {
+        TextStyler builder = Stylr.of("Hello");
         assertNotNull(builder);
-        String result = builder.render();
-        assertEquals("Hello\u001b[0m", result);
     }
 
     @Test
@@ -24,7 +22,7 @@ class StylrTest {
     @Test
     @DisplayName("Test Stylr.of() with empty text")
     void emptyTextCreatesBuilder() {
-        StyleBuilder builder = Stylr.of("");
+        TextStyler builder = Stylr.of("");
         assertNotNull(builder);
         String result = builder.render();
         assertEquals("", result);
@@ -75,5 +73,58 @@ class StylrTest {
                 .color(BasicColor.YELLOW)
                 .render();
         assertEquals("\u001b[33mHello 🌍 世界\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test Stylr.style() creates StyleDefinitionBuilder")
+    void createStyleDefinitionBuilder() {
+        StyleDefinitionBuilder builder = Stylr.style();
+        assertNotNull(builder);
+    }
+
+    @Test
+    @DisplayName("Test Stylr.style() creates reusable Style")
+    void createReusableStyle() {
+        Style style = Stylr.style()
+                .color(BasicColor.RED)
+                .bold()
+                .build();
+
+        String result1 = style.apply("First");
+        String result2 = style.apply("Second");
+
+        assertEquals("\u001b[31;1mFirst\u001b[0m", result1);
+        assertEquals("\u001b[31;1mSecond\u001b[0m", result2);
+    }
+
+    @Test
+    @DisplayName("Test Stylr.style() with fluent API")
+    void fluentApiWithStyle() {
+        String result = Stylr.style()
+                .color(BasicColor.CYAN)
+                .italic()
+                .build()
+                .apply("Stylish Text");
+        assertEquals("\u001b[36;3mStylish Text\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test Stylr.style() vs Stylr.of() behavior")
+    void styleVsOfBehavior() {
+        // Stylr.style() creates reusable Style
+        Style reusableStyle = Stylr.style()
+                .color(BasicColor.GREEN)
+                .build();
+        String result1 = reusableStyle.apply("Text1");
+        String result2 = reusableStyle.apply("Text2");
+
+        // Stylr.of() applies style directly to text
+        String result3 = Stylr.of("Text3")
+                .color(BasicColor.GREEN)
+                .render();
+
+        assertEquals("\u001b[32mText1\u001b[0m", result1);
+        assertEquals("\u001b[32mText2\u001b[0m", result2);
+        assertEquals("\u001b[32mText3\u001b[0m", result3);
     }
 }

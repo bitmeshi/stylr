@@ -369,17 +369,17 @@ class AnsiCodeGeneratorTest {
     }
 
     @Test
-    @DisplayName("Test color precedence behavior in StyleBuilder")
-    void colorPrecedenceInStyleBuilder() {
+    @DisplayName("Test color precedence behavior in TextStyler")
+    void colorPrecedenceInTextStyler() {
         // RGB overrides Basic when set later
-        String rgbOverBasic = new StyleBuilder("Test")
+        String rgbOverBasic = new TextStyler("Test")
                 .color(BasicColor.RED)
                 .color(255, 0, 0)
                 .render();
         assertEquals("\u001b[38;2;255;0;0mTest\u001b[0m", rgbOverBasic);
 
         // Basic overrides RGB when set later
-        String basicOverRgb = new StyleBuilder("Test")
+        String basicOverRgb = new TextStyler("Test")
                 .color(255, 0, 0)
                 .color(BasicColor.BLUE)
                 .render();

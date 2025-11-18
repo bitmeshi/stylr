@@ -8,8 +8,12 @@ public final class Stylr {
         throw new IllegalStateException("Utility class cannot be instantiated");
     }
 
-    public static StyleBuilder of(String text) {
+    public static TextStyler of(String text) {
         Objects.requireNonNull(text, "Text cannot be null");
-        return new StyleBuilder(text);
+        return new TextStyler(text);
+    }
+
+    public static StyleDefinitionBuilder style() {
+        return new StyleDefinitionBuilder();
     }
 }
