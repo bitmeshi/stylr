@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class BasicColorTest {
-
-
     @Test
     @DisplayName("Test all basic colors for text")
     void testAllBasicTextColors() {

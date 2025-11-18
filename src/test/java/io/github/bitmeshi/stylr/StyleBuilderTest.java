@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StyleBuilderTest {
-
     @Test
     @DisplayName("Test plain text without styles")
     void plainText() {
@@ -163,6 +162,14 @@ class StyleBuilderTest {
     }
 
     @Test
+    @DisplayName("Test RGB method chaining returns same instance")
+    void rgbMethodChaining() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+        assertSame(builder, builder.color(255, 0, 0));
+        assertSame(builder, builder.bgColor(0, 255, 0));
+    }
+
+    @Test
     @DisplayName("Test null color throws exception")
     void nullColorThrowsException() {
         StyleBuilder builder = new StyleBuilder("Hello");
@@ -196,5 +203,120 @@ class StyleBuilderTest {
         String result = new StyleBuilder("").bold().render();
         assertEquals("", result);
         assertFalse(result.contains("\u001b[0m"));
+    }
+
+    @Test
+    @DisplayName("Test RGB color only")
+    void testRgbColor() {
+        String result = new StyleBuilder("Hello")
+                .color(255, 128, 0)
+                .render();
+        assertEquals("\u001b[38;2;255;128;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test RGB background color only")
+    void testRgbBackgroundColor() {
+        String result = new StyleBuilder("Hello")
+                .bgColor(100, 200, 150)
+                .render();
+        assertEquals("\u001b[48;2;100;200;150mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test both RGB colors")
+    void testBothRgbColors() {
+        String result = new StyleBuilder("Hello")
+                .color(255, 0, 0)
+                .bgColor(0, 255, 0)
+                .render();
+        assertEquals("\u001b[38;2;255;0;0;48;2;0;255;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test RGB color with attributes")
+    void testRgbColorWithAttributes() {
+        String result = new StyleBuilder("Hello")
+                .color(128, 128, 255)
+                .bold()
+                .italic()
+                .render();
+        assertEquals("\u001b[38;2;128;128;255;1;3mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test RGB colors override basic colors")
+    void testRgbOverrideBasicColors() {
+        String result = new StyleBuilder("Hello")
+                .color(BasicColor.RED)  // This should be overridden
+                .color(0, 255, 0)       // RGB green should take precedence
+                .render();
+        assertEquals("\u001b[38;2;0;255;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test basic colors override RGB colors when set later")
+    void testBasicOverrideRgbColors() {
+        String result = new StyleBuilder("Hello")
+                .color(255, 0, 0)       // RGB red
+                .color(BasicColor.BLUE) // Basic blue should override
+                .render();
+        assertEquals("\u001b[34mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test invalid RGB values throw exception")
+    void testInvalidRgbValues() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+
+        // Test negative values
+        assertThrows(IllegalArgumentException.class, () -> builder.color(-1, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> builder.color(0, -1, 0));
+        assertThrows(IllegalArgumentException.class, () -> builder.color(0, 0, -1));
+
+        // Test values > 255
+        assertThrows(IllegalArgumentException.class, () -> builder.color(256, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> builder.color(0, 256, 0));
+        assertThrows(IllegalArgumentException.class, () -> builder.color(0, 0, 256));
+
+        // Test background colors
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor(-1, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor(256, 0, 0));
+    }
+
+    @Test
+    @DisplayName("Test RGB boundary values")
+    void testRgbBoundaryValues() {
+        // Test minimum values (0)
+        String result1 = new StyleBuilder("Test")
+                .color(0, 0, 0)
+                .render();
+        assertEquals("\u001b[38;2;0;0;0mTest\u001b[0m", result1);
+
+        // Test maximum values (255)
+        String result2 = new StyleBuilder("Test")
+                .color(255, 255, 255)
+                .render();
+        assertEquals("\u001b[38;2;255;255;255mTest\u001b[0m", result2);
+
+        // Test mixed boundary values
+        String result3 = new StyleBuilder("Test")
+                .bgColor(0, 255, 128)
+                .render();
+        assertEquals("\u001b[48;2;0;255;128mTest\u001b[0m", result3);
+    }
+
+    @Test
+    @DisplayName("Test complex RGB combination with all features")
+    void testComplexRgbCombination() {
+        String result = new StyleBuilder("Complex")
+                .color(120, 80, 200)
+                .bgColor(255, 240, 100)
+                .bold()
+                .italic()
+                .underlined()
+                .reverse()
+                .render();
+        assertEquals("\u001b[38;2;120;80;200;48;2;255;240;100;1;3;4;7mComplex\u001b[0m", result);
     }
 }

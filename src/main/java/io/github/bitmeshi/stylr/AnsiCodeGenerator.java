@@ -14,23 +14,20 @@ final class AnsiCodeGenerator {
             return "";
         }
 
-        if (!colorPrefix.isEmpty()) {
-            ansiPrefix.add(colorPrefix);
-        }
-
-        if (!bgColorPrefix.isEmpty()) {
-            ansiPrefix.add(bgColorPrefix);
-        }
-
-        if (!attributePrefix.isEmpty()) {
-            ansiPrefix.add(attributePrefix);
-        }
+        if (!colorPrefix.isEmpty()) ansiPrefix.add(colorPrefix);
+        if (!bgColorPrefix.isEmpty()) ansiPrefix.add(bgColorPrefix);
+        if (!attributePrefix.isEmpty()) ansiPrefix.add(attributePrefix);
 
         return ansiPrefix.toString();
     }
 
     private static String getColorTextPrefix(StyleConfig config) {
-        if (config.basicColor() != null) {
+        if (config.rgbColor() != null && config.basicColor() == null) {
+            Rgb rgb = config.rgbColor();
+            return String.format("38;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
+        }
+
+        if (config.basicColor() != null && config.rgbColor() == null) {
             return config.basicColor().getAnsiCode(false);
         }
 
@@ -38,7 +35,12 @@ final class AnsiCodeGenerator {
     }
 
     private static String getColorBackgroundPrefix(StyleConfig config) {
-        if (config.bgBasicColor() != null) {
+        if (config.bgRgbColor() != null && config.bgBasicColor() == null) {
+            Rgb rgb = config.bgRgbColor();
+            return String.format("48;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
+        }
+
+        if (config.bgBasicColor() != null && config.bgRgbColor() == null) {
             return config.bgBasicColor().getAnsiCode(true);
         }
 
@@ -48,37 +50,14 @@ final class AnsiCodeGenerator {
     private static String getAttributePrefix(StyleConfig config) {
         StringJoiner prefix = new StringJoiner(";");
 
-        if (config.isBold()) {
-            prefix.add("1");
-        }
-
-        if (config.isDim()) {
-            prefix.add("2");
-        }
-
-        if (config.isItalic()) {
-            prefix.add("3");
-        }
-
-        if (config.isUnderlined()) {
-            prefix.add("4");
-        }
-
-        if (config.isSlowBlink()) {
-            prefix.add("5");
-        }
-
-        if (config.isRapidBlink()) {
-            prefix.add("6");
-        }
-
-        if (config.isReverse()) {
-            prefix.add("7");
-        }
-
-        if (config.isHide()) {
-            prefix.add("8");
-        }
+        if (config.isBold()) prefix.add("1");
+        if (config.isDim()) prefix.add("2");
+        if (config.isItalic()) prefix.add("3");
+        if (config.isUnderlined()) prefix.add("4");
+        if (config.isSlowBlink()) prefix.add("5");
+        if (config.isRapidBlink()) prefix.add("6");
+        if (config.isReverse()) prefix.add("7");
+        if (config.isHide()) prefix.add("8");
 
         return prefix.toString();
     }

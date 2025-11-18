@@ -12,6 +12,7 @@ class AnsiCodeGeneratorTest {
     void emptyStyleConfig() {
         StyleConfig config = new StyleConfig(
                 null, null,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -26,6 +27,7 @@ class AnsiCodeGeneratorTest {
     void redTextColor() {
         StyleConfig config = new StyleConfig(
                 BasicColor.RED, null,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -40,6 +42,7 @@ class AnsiCodeGeneratorTest {
     void greenBackgroundColor() {
         StyleConfig config = new StyleConfig(
                 null, BasicColor.GREEN,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -53,6 +56,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Test with bold")
     void boldAttribute() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 true, false,
                 false, false,
@@ -68,6 +72,7 @@ class AnsiCodeGeneratorTest {
     void dimAttribute() {
         StyleConfig config = new StyleConfig(
                 null, null,
+                null, null,
                 false, true,
                 false, false,
                 false, false,
@@ -81,6 +86,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Test with italic")
     void italicAttribute() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 false, false,
                 true, false,
@@ -96,6 +102,7 @@ class AnsiCodeGeneratorTest {
     void underlineAttribute() {
         StyleConfig config = new StyleConfig(
                 null, null,
+                null, null,
                 false, false,
                 false, true,
                 false, false,
@@ -109,6 +116,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Test with slow blink")
     void slowBlinkAttribute() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 false, false,
                 false, false,
@@ -124,6 +132,7 @@ class AnsiCodeGeneratorTest {
     void rapidBlinkAttribute() {
         StyleConfig config = new StyleConfig(
                 null, null,
+                null, null,
                 false, false,
                 false, false,
                 false, true,
@@ -137,6 +146,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Test with reverse")
     void reverseAttribute() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 false, false,
                 false, false,
@@ -152,6 +162,7 @@ class AnsiCodeGeneratorTest {
     void hideAttribute() {
         StyleConfig config = new StyleConfig(
                 null, null,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -166,6 +177,7 @@ class AnsiCodeGeneratorTest {
     void multipleAttributes() {
         StyleConfig config = new StyleConfig(
                 BasicColor.CYAN, null,
+                null, null,
                 true, false,
                 true, false,
                 false, false,
@@ -180,6 +192,7 @@ class AnsiCodeGeneratorTest {
     void colorAndBackgroundCombination() {
         StyleConfig config = new StyleConfig(
                 BasicColor.RED, BasicColor.GREEN,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -194,6 +207,7 @@ class AnsiCodeGeneratorTest {
     void colorBackgroundAndAttributes() {
         StyleConfig config = new StyleConfig(
                 BasicColor.BLUE, BasicColor.YELLOW,
+                null, null,
                 true, false,
                 true, true,
                 false, false,
@@ -208,6 +222,7 @@ class AnsiCodeGeneratorTest {
     void brightColors() {
         StyleConfig config = new StyleConfig(
                 BasicColor.BRIGHT_WHITE, BasicColor.BRIGHT_BLACK,
+                null, null,
                 false, false,
                 false, false,
                 false, false,
@@ -221,6 +236,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Test with all attributes enabled")
     void allAttributesEnabled() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 true, true,
                 true, true,
@@ -236,6 +252,7 @@ class AnsiCodeGeneratorTest {
     void allStylesEnabled() {
         StyleConfig config = new StyleConfig(
                 BasicColor.MAGENTA, BasicColor.CYAN,
+                null, null,
                 true, true,
                 true, true,
                 true, true,
@@ -249,6 +266,7 @@ class AnsiCodeGeneratorTest {
     @DisplayName("Validate null color and bgColor are handled correctly")
     void nullColorValidation() {
         StyleConfig config = new StyleConfig(
+                null, null,
                 null, null,
                 false, false,
                 false, false,
@@ -264,6 +282,7 @@ class AnsiCodeGeneratorTest {
     void ansiPrefixStructure() {
         StyleConfig config = new StyleConfig(
                 BasicColor.RED, null,
+                null, null,
                 true, false,
                 false, false,
                 false, false,
@@ -274,5 +293,126 @@ class AnsiCodeGeneratorTest {
         assertTrue(ansiCode.endsWith("m"));
         assertTrue(ansiCode.contains("31")); // red color code
         assertTrue(ansiCode.contains("1"));  // bold attribute
+    }
+
+    @Test
+    @DisplayName("Test with RGB text color")
+    void rgbTextColor() {
+        StyleConfig config = new StyleConfig(
+                null, null,
+                new Rgb(255, 128, 64), null,
+                false, false,
+                false, false,
+                false, false,
+                false, false
+        );
+        String ansiCode = AnsiCodeGenerator.getAnsiPrefix(config);
+        assertEquals("\u001b[38;2;255;128;64m", ansiCode);
+    }
+
+    @Test
+    @DisplayName("Test with RGB background color")
+    void rgbBackgroundColor() {
+        StyleConfig config = new StyleConfig(
+                null, null,
+                null, new Rgb(100, 200, 50),
+                false, false,
+                false, false,
+                false, false,
+                false, false
+        );
+        String ansiCode = AnsiCodeGenerator.getAnsiPrefix(config);
+        assertEquals("\u001b[48;2;100;200;50m", ansiCode);
+    }
+
+    @Test
+    @DisplayName("Test with both RGB colors")
+    void rgbColorsAndAttributes() {
+        StyleConfig config = new StyleConfig(
+                null, null,
+                new Rgb(255, 0, 0), new Rgb(0, 255, 0),
+                true, false,
+                true, false,
+                false, false,
+                false, false
+        );
+        String ansiCode = AnsiCodeGenerator.getAnsiPrefix(config);
+        assertEquals("\u001b[38;2;255;0;0;48;2;0;255;0;1;3m", ansiCode);
+    }
+
+    @Test
+    @DisplayName("Test RGB and Basic colors work independently")
+    void rgbAndBasicColorsSeparately() {
+        // Test RGB color only
+        StyleConfig rgbConfig = new StyleConfig(
+                null, null,
+                new Rgb(128, 128, 128), null,
+                false, false,
+                false, false,
+                false, false,
+                false, false
+        );
+        String rgbCode = AnsiCodeGenerator.getAnsiPrefix(rgbConfig);
+        assertEquals("\u001b[38;2;128;128;128m", rgbCode);
+
+        // Test Basic color only
+        StyleConfig basicConfig = new StyleConfig(
+                BasicColor.RED, null,
+                null, null,
+                false, false,
+                false, false,
+                false, false,
+                false, false
+        );
+        String basicCode = AnsiCodeGenerator.getAnsiPrefix(basicConfig);
+        assertEquals("\u001b[31m", basicCode);
+    }
+
+    @Test
+    @DisplayName("Test color precedence behavior in StyleBuilder")
+    void colorPrecedenceInStyleBuilder() {
+        // RGB overrides Basic when set later
+        String rgbOverBasic = new StyleBuilder("Test")
+                .color(BasicColor.RED)
+                .color(255, 0, 0)
+                .render();
+        assertEquals("\u001b[38;2;255;0;0mTest\u001b[0m", rgbOverBasic);
+
+        // Basic overrides RGB when set later
+        String basicOverRgb = new StyleBuilder("Test")
+                .color(255, 0, 0)
+                .color(BasicColor.BLUE)
+                .render();
+        assertEquals("\u001b[34mTest\u001b[0m", basicOverRgb);
+    }
+
+    @Test
+    @DisplayName("Test mixed bgRGB and BasicColor")
+    void mixedRgbAndBasicColor() {
+        StyleConfig config = new StyleConfig(
+                BasicColor.RED, null,
+                null, new Rgb(0, 255, 255),
+                false, false,
+                false, false,
+                false, false,
+                false, false
+        );
+        String ansiCode = AnsiCodeGenerator.getAnsiPrefix(config);
+        assertEquals("\u001b[31;48;2;0;255;255m", ansiCode);
+    }
+
+    @Test
+    @DisplayName("Test RGB with all attributes")
+    void rgbWithAllAttributes() {
+        StyleConfig config = new StyleConfig(
+                null, null,
+                new Rgb(255, 255, 255), new Rgb(0, 0, 0),
+                true, true,
+                true, true,
+                true, true,
+                true, true
+        );
+        String ansiCode = AnsiCodeGenerator.getAnsiPrefix(config);
+        assertEquals("\u001b[38;2;255;255;255;48;2;0;0;0;1;2;3;4;5;6;7;8m", ansiCode);
     }
 }

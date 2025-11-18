@@ -6,6 +6,8 @@ public final class StyleBuilder {
     private final String text;
     private BasicColor basicColor;
     private BasicColor bgBasicColor;
+    private Rgb rgbColor;
+    private Rgb bgRgbColor;
     private boolean isBold;
     private boolean isDim;
     private boolean isItalic;
@@ -22,12 +24,32 @@ public final class StyleBuilder {
     public StyleBuilder color(BasicColor basicColor) {
         Objects.requireNonNull(basicColor, "BasicColor cannot be null");
         this.basicColor = basicColor;
+        this.rgbColor = null;
+        return this;
+    }
+
+    public StyleBuilder color(int r, int g, int b) {
+        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+            throw new IllegalArgumentException("RGB values must be between 0 and 255");
+        }
+        this.rgbColor = new Rgb(r, g, b);
+        this.basicColor = null;
         return this;
     }
 
     public StyleBuilder bgColor(BasicColor basicColor) {
         Objects.requireNonNull(basicColor, "Background BasicColor cannot be null");
         this.bgBasicColor = basicColor;
+        this.bgRgbColor = null;
+        return this;
+    }
+
+    public StyleBuilder bgColor(int r, int g, int b) {
+        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+            throw new IllegalArgumentException("RGB values must be between 0 and 255");
+        }
+        this.bgRgbColor = new Rgb(r, g, b);
+        this.bgBasicColor = null;
         return this;
     }
 
@@ -75,6 +97,8 @@ public final class StyleBuilder {
         StyleConfig config = new StyleConfig(
                 this.basicColor,
                 this.bgBasicColor,
+                this.rgbColor,
+                this.bgRgbColor,
                 this.isBold,
                 this.isDim,
                 this.isItalic,
