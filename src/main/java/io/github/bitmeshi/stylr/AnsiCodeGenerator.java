@@ -22,12 +22,12 @@ final class AnsiCodeGenerator {
     }
 
     private static String getColorTextPrefix(StyleConfig config) {
-        if (config.rgbColor() != null && config.basicColor() == null) {
+        if (config.rgbColor() != null) {
             Rgb rgb = config.rgbColor();
             return String.format("38;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
         }
 
-        if (config.basicColor() != null && config.rgbColor() == null) {
+        if (config.basicColor() != null) {
             return config.basicColor().getAnsiCode(false);
         }
 
@@ -35,12 +35,12 @@ final class AnsiCodeGenerator {
     }
 
     private static String getColorBackgroundPrefix(StyleConfig config) {
-        if (config.bgRgbColor() != null && config.bgBasicColor() == null) {
+        if (config.bgRgbColor() != null) {
             Rgb rgb = config.bgRgbColor();
             return String.format("48;2;%d;%d;%d", rgb.r(), rgb.g(), rgb.b());
         }
 
-        if (config.bgBasicColor() != null && config.bgRgbColor() == null) {
+        if (config.bgBasicColor() != null) {
             return config.bgBasicColor().getAnsiCode(true);
         }
 
