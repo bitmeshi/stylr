@@ -5,25 +5,25 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StyleBuilderTest {
+class TextStylerTest {
     @Test
     @DisplayName("Test plain text without styles")
     void plainText() {
-        String result = new StyleBuilder("Hello World").render();
+        String result = new TextStyler("Hello World").render();
         assertEquals("Hello World\u001b[0m", result);
     }
 
     @Test
     @DisplayName("Test empty text")
     void emptyText() {
-        String result = new StyleBuilder("").render();
+        String result = new TextStyler("").render();
         assertEquals("", result);
     }
 
     @Test
     @DisplayName("Test text with color only")
     void textWithColor() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.RED)
                 .render();
         assertEquals("\u001b[31mHello\u001b[0m", result);
@@ -32,7 +32,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test text with background color only")
     void textWithBackgroundColor() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bgColor(BasicColor.BLUE)
                 .render();
         assertEquals("\u001b[44mHello\u001b[0m", result);
@@ -41,7 +41,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test text with both color and background")
     void textWithColorAndBackground() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.RED)
                 .bgColor(BasicColor.BLUE)
                 .render();
@@ -51,7 +51,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test text with single attribute - bold")
     void textWithBold() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bold()
                 .render();
         assertEquals("\u001b[1mHello\u001b[0m", result);
@@ -60,7 +60,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test text with multiple attributes")
     void textWithMultipleAttributes() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bold()
                 .italic()
                 .underlined()
@@ -71,7 +71,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test text with all styles combined")
     void textWithAllStyles() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.YELLOW)
                 .bgColor(BasicColor.MAGENTA)
                 .bold()
@@ -83,7 +83,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test dim attribute")
     void textWithDim() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .dim()
                 .render();
         assertEquals("\u001b[2mHello\u001b[0m", result);
@@ -92,7 +92,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test slow blink attribute")
     void textWithSlowBlink() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .slowBlink()
                 .render();
         assertEquals("\u001b[5mHello\u001b[0m", result);
@@ -101,7 +101,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test rapid blink attribute")
     void textWithRapidBlink() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .rapidBlink()
                 .render();
         assertEquals("\u001b[6mHello\u001b[0m", result);
@@ -110,7 +110,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test reverse attribute")
     void textWithReverse() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .reverse()
                 .render();
         assertEquals("\u001b[7mHello\u001b[0m", result);
@@ -119,7 +119,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hide attribute")
     void textWithHide() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .hide()
                 .render();
         assertEquals("\u001b[8mHello\u001b[0m", result);
@@ -128,7 +128,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test all attributes combined")
     void textWithAllAttributes() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bold()
                 .dim()
                 .italic()
@@ -144,7 +144,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test bright colors")
     void textWithBrightColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.BRIGHT_GREEN)
                 .bgColor(BasicColor.BRIGHT_RED)
                 .render();
@@ -154,7 +154,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test method chaining returns same instance")
     void methodChaining() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertSame(builder, builder.color(BasicColor.RED));
         assertSame(builder, builder.bgColor(BasicColor.BLUE));
         assertSame(builder, builder.bold());
@@ -164,7 +164,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB method chaining returns same instance")
     void rgbMethodChaining() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertSame(builder, builder.color(255, 0, 0));
         assertSame(builder, builder.bgColor(0, 255, 0));
     }
@@ -172,28 +172,28 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test null color (basic color) throws exception")
     void nullColorBasicThrowsException() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertThrows(NullPointerException.class, () -> builder.color((BasicColor) null));
     }
 
     @Test
     @DisplayName("Test null color (hexadecimal) throws exception")
     void nullColorHexThrowsException() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertThrows(NullPointerException.class, () -> builder.color((String) null));
     }
 
     @Test
     @DisplayName("Test null background color (basic color) throws exception")
     void nullBackgroundColorBasicThrowsException() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertThrows(NullPointerException.class, () -> builder.bgColor((BasicColor) null));
     }
 
     @Test
     @DisplayName("Test null background color (hexadecimal) throws exception")
     void nullBackgroundColorHexThrowsException() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertThrows(NullPointerException.class, () -> builder.bgColor((String) null));
     }
 
@@ -201,20 +201,20 @@ class StyleBuilderTest {
     @DisplayName("Test final reset sequence is always present for non-empty text")
     void finalResetSequence() {
         // Test that reset sequence \u001b[0m is always at the end for styled text
-        String result1 = new StyleBuilder("test").bold().render();
+        String result1 = new TextStyler("test").bold().render();
         assertTrue(result1.endsWith("\u001b[0m"));
 
-        String result2 = new StyleBuilder("test").color(BasicColor.RED).render();
+        String result2 = new TextStyler("test").color(BasicColor.RED).render();
         assertTrue(result2.endsWith("\u001b[0m"));
 
-        String result3 = new StyleBuilder("test").render();
+        String result3 = new TextStyler("test").render();
         assertTrue(result3.endsWith("\u001b[0m"));
     }
 
     @Test
     @DisplayName("Test no reset sequence for empty text")
     void noResetForEmptyText() {
-        String result = new StyleBuilder("").bold().render();
+        String result = new TextStyler("").bold().render();
         assertEquals("", result);
         assertFalse(result.contains("\u001b[0m"));
     }
@@ -222,7 +222,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB color only")
     void testRgbColor() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(255, 128, 0)
                 .render();
         assertEquals("\u001b[38;2;255;128;0mHello\u001b[0m", result);
@@ -231,7 +231,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB background color only")
     void testRgbBackgroundColor() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bgColor(100, 200, 150)
                 .render();
         assertEquals("\u001b[48;2;100;200;150mHello\u001b[0m", result);
@@ -240,7 +240,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test both RGB colors")
     void testBothRgbColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(255, 0, 0)
                 .bgColor(0, 255, 0)
                 .render();
@@ -250,7 +250,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB color with attributes")
     void testRgbColorWithAttributes() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(128, 128, 255)
                 .bold()
                 .italic()
@@ -261,7 +261,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB colors override basic colors")
     void testRgbOverrideBasicColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.RED)  // This should be overridden
                 .color(0, 255, 0)       // RGB green should take precedence
                 .render();
@@ -271,7 +271,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test basic colors override RGB colors when set later")
     void testBasicOverrideRgbColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(255, 0, 0)       // RGB red
                 .color(BasicColor.BLUE) // Basic blue should override
                 .render();
@@ -281,7 +281,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test invalid RGB values throw exception")
     void testInvalidRgbValues() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
 
         // Test negative values
         assertThrows(IllegalArgumentException.class, () -> builder.color(-1, 0, 0));
@@ -302,19 +302,19 @@ class StyleBuilderTest {
     @DisplayName("Test RGB boundary values")
     void testRgbBoundaryValues() {
         // Test minimum values (0)
-        String result1 = new StyleBuilder("Test")
+        String result1 = new TextStyler("Test")
                 .color(0, 0, 0)
                 .render();
         assertEquals("\u001b[38;2;0;0;0mTest\u001b[0m", result1);
 
         // Test maximum values (255)
-        String result2 = new StyleBuilder("Test")
+        String result2 = new TextStyler("Test")
                 .color(255, 255, 255)
                 .render();
         assertEquals("\u001b[38;2;255;255;255mTest\u001b[0m", result2);
 
         // Test mixed boundary values
-        String result3 = new StyleBuilder("Test")
+        String result3 = new TextStyler("Test")
                 .bgColor(0, 255, 128)
                 .render();
         assertEquals("\u001b[48;2;0;255;128mTest\u001b[0m", result3);
@@ -323,7 +323,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test complex RGB combination with all features")
     void testComplexRgbCombination() {
-        String result = new StyleBuilder("Complex")
+        String result = new TextStyler("Complex")
                 .color(120, 80, 200)
                 .bgColor(255, 240, 100)
                 .bold()
@@ -337,7 +337,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal color only (6-digit)")
     void testHexColorSixDigit() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#FF8000")
                 .render();
         assertEquals("\u001b[38;2;255;128;0mHello\u001b[0m", result);
@@ -346,7 +346,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal color only (3-digit)")
     void testHexColorThreeDigit() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#F80")
                 .render();
         assertEquals("\u001b[38;2;255;136;0mHello\u001b[0m", result);
@@ -355,7 +355,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal background color only (6-digit)")
     void testHexBackgroundColorSixDigit() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bgColor("#64C896")
                 .render();
         assertEquals("\u001b[48;2;100;200;150mHello\u001b[0m", result);
@@ -364,7 +364,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal background color only (3-digit)")
     void testHexBackgroundColorThreeDigit() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .bgColor("#6C9")
                 .render();
         assertEquals("\u001b[48;2;102;204;153mHello\u001b[0m", result);
@@ -373,7 +373,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test both hexadecimal colors")
     void testBothHexColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#FF0000")
                 .bgColor("#00FF00")
                 .render();
@@ -383,7 +383,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal color with attributes")
     void testHexColorWithAttributes() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#8080FF")
                 .bold()
                 .italic()
@@ -394,7 +394,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal colors override basic colors")
     void testHexOverrideBasicColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(BasicColor.RED)    // This should be overridden
                 .color("#00FF00")         // Hex green should take precedence
                 .render();
@@ -404,7 +404,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test basic colors override hexadecimal colors when set later")
     void testBasicOverrideHexColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#FF0000")         // Hex red
                 .color(BasicColor.BLUE)   // Basic blue should override
                 .render();
@@ -414,7 +414,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test RGB colors override hexadecimal colors when set later")
     void testRgbOverrideHexColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color("#FF0000")         // Hex red
                 .color(128, 128, 255)     // RGB should override
                 .render();
@@ -424,7 +424,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal colors override RGB colors when set later")
     void testHexOverrideRgbColors() {
-        String result = new StyleBuilder("Hello")
+        String result = new TextStyler("Hello")
                 .color(255, 0, 0)         // RGB red
                 .color("#00FF00")         // Hex green should override
                 .render();
@@ -434,7 +434,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test invalid hexadecimal values throw exception")
     void testInvalidHexValues() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
 
         // Invalid format
         assertThrows(IllegalArgumentException.class, () -> builder.color("FF0000"));  // Missing #
@@ -449,7 +449,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test invalid hexadecimal values with spaces and special characters throw exception")
     void testInvalidHexValuesWithSpecialChars() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
 
         // Test specific cases with spaces and dashes
         assertThrows(IllegalArgumentException.class, () -> builder.color("#2 3432"));
@@ -473,7 +473,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test hexadecimal method chaining returns same instance")
     void hexMethodChaining() {
-        StyleBuilder builder = new StyleBuilder("Hello");
+        TextStyler builder = new TextStyler("Hello");
         assertSame(builder, builder.color("#FF0000"));
         assertSame(builder, builder.bgColor("#00FF00"));
     }
@@ -481,7 +481,7 @@ class StyleBuilderTest {
     @Test
     @DisplayName("Test complex hexadecimal combination with all features")
     void testComplexHexCombination() {
-        String result = new StyleBuilder("Complex")
+        String result = new TextStyler("Complex")
                 .color("#7850C8")
                 .bgColor("#FFF064")
                 .bold()
