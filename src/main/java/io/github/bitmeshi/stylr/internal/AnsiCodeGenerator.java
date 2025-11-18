@@ -1,8 +1,8 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.internal;
 
 import java.util.StringJoiner;
 
-final class AnsiCodeGenerator {
+public final class AnsiCodeGenerator {
     public static String getAnsiPrefix(StyleConfig config) {
         StringJoiner ansiPrefix = new StringJoiner(";", "\u001b[", "m");
 

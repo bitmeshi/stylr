@@ -1,6 +1,9 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.internal;
 
-record StyleConfig(
+import io.github.bitmeshi.stylr.BasicColor;
+import io.github.bitmeshi.stylr.internal.color.Rgb;
+
+public record StyleConfig(
         BasicColor basicColor,
         BasicColor bgBasicColor,
         Rgb rgbColor,

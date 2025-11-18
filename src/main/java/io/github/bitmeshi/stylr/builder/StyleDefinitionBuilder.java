@@ -1,4 +1,7 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.builder;
+
+import io.github.bitmeshi.stylr.Style;
+import io.github.bitmeshi.stylr.internal.AnsiCodeGenerator;
 
 public final class StyleDefinitionBuilder extends BaseStyleBuilder<StyleDefinitionBuilder> {
     @Override

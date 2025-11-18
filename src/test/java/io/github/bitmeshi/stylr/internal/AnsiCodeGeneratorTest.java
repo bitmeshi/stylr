@@ -1,5 +1,8 @@
-package io.github.bitmeshi.stylr;
+package io.github.bitmeshi.stylr.internal;
 
+import io.github.bitmeshi.stylr.BasicColor;
+import io.github.bitmeshi.stylr.builder.TextStyler;
+import io.github.bitmeshi.stylr.internal.color.Rgb;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

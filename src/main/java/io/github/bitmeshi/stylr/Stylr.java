@@ -1,9 +1,11 @@
 package io.github.bitmeshi.stylr;
 
+import io.github.bitmeshi.stylr.builder.StyleDefinitionBuilder;
+import io.github.bitmeshi.stylr.builder.TextStyler;
+
 import java.util.Objects;
 
 public final class Stylr {
-
     private Stylr() {
         throw new IllegalStateException("Utility class cannot be instantiated");
     }
