@@ -22,7 +22,7 @@ public final class StyleBuilder {
     }
 
     public StyleBuilder color(BasicColor basicColor) {
-        Objects.requireNonNull(basicColor, "BasicColor cannot be null");
+        Objects.requireNonNull(basicColor, "color cannot be null");
         this.basicColor = basicColor;
         this.rgbColor = null;
         return this;
@@ -37,8 +37,15 @@ public final class StyleBuilder {
         return this;
     }
 
+    public StyleBuilder color(String hexadecimal) {
+        Objects.requireNonNull(hexadecimal, "color cannot be null");
+        this.rgbColor = Rgb.fromHex(hexadecimal);
+        this.basicColor = null;
+        return this;
+    }
+
     public StyleBuilder bgColor(BasicColor basicColor) {
-        Objects.requireNonNull(basicColor, "Background BasicColor cannot be null");
+        Objects.requireNonNull(basicColor, "bgColor cannot be null");
         this.bgBasicColor = basicColor;
         this.bgRgbColor = null;
         return this;
@@ -49,6 +56,13 @@ public final class StyleBuilder {
             throw new IllegalArgumentException("RGB values must be between 0 and 255");
         }
         this.bgRgbColor = new Rgb(r, g, b);
+        this.bgBasicColor = null;
+        return this;
+    }
+
+    public StyleBuilder bgColor(String hexadecimal) {
+        Objects.requireNonNull(hexadecimal, "bgColor cannot be null");
+        this.bgRgbColor = Rgb.fromHex(hexadecimal);
         this.bgBasicColor = null;
         return this;
     }

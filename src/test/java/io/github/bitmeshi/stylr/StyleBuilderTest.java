@@ -170,17 +170,31 @@ class StyleBuilderTest {
     }
 
     @Test
-    @DisplayName("Test null color throws exception")
-    void nullColorThrowsException() {
+    @DisplayName("Test null color (basic color) throws exception")
+    void nullColorBasicThrowsException() {
         StyleBuilder builder = new StyleBuilder("Hello");
-        assertThrows(NullPointerException.class, () -> builder.color(null));
+        assertThrows(NullPointerException.class, () -> builder.color((BasicColor) null));
     }
 
     @Test
-    @DisplayName("Test null background color throws exception")
-    void nullBackgroundColorThrowsException() {
+    @DisplayName("Test null color (hexadecimal) throws exception")
+    void nullColorHexThrowsException() {
         StyleBuilder builder = new StyleBuilder("Hello");
-        assertThrows(NullPointerException.class, () -> builder.bgColor(null));
+        assertThrows(NullPointerException.class, () -> builder.color((String) null));
+    }
+
+    @Test
+    @DisplayName("Test null background color (basic color) throws exception")
+    void nullBackgroundColorBasicThrowsException() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+        assertThrows(NullPointerException.class, () -> builder.bgColor((BasicColor) null));
+    }
+
+    @Test
+    @DisplayName("Test null background color (hexadecimal) throws exception")
+    void nullBackgroundColorHexThrowsException() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+        assertThrows(NullPointerException.class, () -> builder.bgColor((String) null));
     }
 
     @Test
@@ -312,6 +326,164 @@ class StyleBuilderTest {
         String result = new StyleBuilder("Complex")
                 .color(120, 80, 200)
                 .bgColor(255, 240, 100)
+                .bold()
+                .italic()
+                .underlined()
+                .reverse()
+                .render();
+        assertEquals("\u001b[38;2;120;80;200;48;2;255;240;100;1;3;4;7mComplex\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal color only (6-digit)")
+    void testHexColorSixDigit() {
+        String result = new StyleBuilder("Hello")
+                .color("#FF8000")
+                .render();
+        assertEquals("\u001b[38;2;255;128;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal color only (3-digit)")
+    void testHexColorThreeDigit() {
+        String result = new StyleBuilder("Hello")
+                .color("#F80")
+                .render();
+        assertEquals("\u001b[38;2;255;136;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal background color only (6-digit)")
+    void testHexBackgroundColorSixDigit() {
+        String result = new StyleBuilder("Hello")
+                .bgColor("#64C896")
+                .render();
+        assertEquals("\u001b[48;2;100;200;150mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal background color only (3-digit)")
+    void testHexBackgroundColorThreeDigit() {
+        String result = new StyleBuilder("Hello")
+                .bgColor("#6C9")
+                .render();
+        assertEquals("\u001b[48;2;102;204;153mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test both hexadecimal colors")
+    void testBothHexColors() {
+        String result = new StyleBuilder("Hello")
+                .color("#FF0000")
+                .bgColor("#00FF00")
+                .render();
+        assertEquals("\u001b[38;2;255;0;0;48;2;0;255;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal color with attributes")
+    void testHexColorWithAttributes() {
+        String result = new StyleBuilder("Hello")
+                .color("#8080FF")
+                .bold()
+                .italic()
+                .render();
+        assertEquals("\u001b[38;2;128;128;255;1;3mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal colors override basic colors")
+    void testHexOverrideBasicColors() {
+        String result = new StyleBuilder("Hello")
+                .color(BasicColor.RED)    // This should be overridden
+                .color("#00FF00")         // Hex green should take precedence
+                .render();
+        assertEquals("\u001b[38;2;0;255;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test basic colors override hexadecimal colors when set later")
+    void testBasicOverrideHexColors() {
+        String result = new StyleBuilder("Hello")
+                .color("#FF0000")         // Hex red
+                .color(BasicColor.BLUE)   // Basic blue should override
+                .render();
+        assertEquals("\u001b[34mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test RGB colors override hexadecimal colors when set later")
+    void testRgbOverrideHexColors() {
+        String result = new StyleBuilder("Hello")
+                .color("#FF0000")         // Hex red
+                .color(128, 128, 255)     // RGB should override
+                .render();
+        assertEquals("\u001b[38;2;128;128;255mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal colors override RGB colors when set later")
+    void testHexOverrideRgbColors() {
+        String result = new StyleBuilder("Hello")
+                .color(255, 0, 0)         // RGB red
+                .color("#00FF00")         // Hex green should override
+                .render();
+        assertEquals("\u001b[38;2;0;255;0mHello\u001b[0m", result);
+    }
+
+    @Test
+    @DisplayName("Test invalid hexadecimal values throw exception")
+    void testInvalidHexValues() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+
+        // Invalid format
+        assertThrows(IllegalArgumentException.class, () -> builder.color("FF0000"));  // Missing #
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#FFFF"));   // Wrong length
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#GG0000")); // Invalid hex chars
+
+        // Background colors
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("00FF00")); // Missing #
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("#FFFF"));  // Wrong length
+    }
+
+    @Test
+    @DisplayName("Test invalid hexadecimal values with spaces and special characters throw exception")
+    void testInvalidHexValuesWithSpecialChars() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+
+        // Test specific cases with spaces and dashes
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#2 3432"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#1-32-1"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#12 456"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#AB CD"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#A B"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#1-2"));
+
+        // Test with background colors as well
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("#2 3432"));
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("#1-32-1"));
+
+        // Test with other special characters
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#12@456"));
+        assertThrows(IllegalArgumentException.class, () -> builder.color("#FF&00A"));
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("#12+456"));
+        assertThrows(IllegalArgumentException.class, () -> builder.bgColor("#FF*00A"));
+    }
+
+    @Test
+    @DisplayName("Test hexadecimal method chaining returns same instance")
+    void hexMethodChaining() {
+        StyleBuilder builder = new StyleBuilder("Hello");
+        assertSame(builder, builder.color("#FF0000"));
+        assertSame(builder, builder.bgColor("#00FF00"));
+    }
+
+    @Test
+    @DisplayName("Test complex hexadecimal combination with all features")
+    void testComplexHexCombination() {
+        String result = new StyleBuilder("Complex")
+                .color("#7850C8")
+                .bgColor("#FFF064")
                 .bold()
                 .italic()
                 .underlined()
