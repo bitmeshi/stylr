@@ -1,3 +1,8 @@
+<div align="center">
+  <img width="396" height="189" alt="stylr_logo" src="https://github.com/user-attachments/assets/0c5e28e1-d61c-4a70-8a9f-c7ce911fb76e" />
+  <br><br>
+</div>
+
 # Stylr
 
 A modern, fluent Java library for styling terminal output with ANSI escape codes.
