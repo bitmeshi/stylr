@@ -1,5 +1,20 @@
 package io.github.bitmeshi.stylr.internal.color;
 
+/**
+ * Represents an RGB color with red, green, and blue components.
+ * <p>
+ * This record encapsulates RGB color values with validation to ensure
+ * all components are within the valid range of 0-255. It provides
+ * utility methods for creating RGB colors from hexadecimal strings.
+ * <p>
+ * This class is part of the internal API and should not be used directly
+ * by library consumers.
+ *
+ * @param r the red component (0-255)
+ * @param g the green component (0-255)
+ * @param b the blue component (0-255)
+ * @since 1.0
+ */
 public record Rgb(int r, int g, int b) {
     public Rgb {
         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
@@ -7,6 +22,19 @@ public record Rgb(int r, int g, int b) {
         }
     }
 
+    /**
+     * Creates an RGB color from a hexadecimal color string.
+     * <p>
+     * Supports both 3-digit and 6-digit hexadecimal formats:
+     * <ul>
+     *   <li>3-digit: {@code #RGB} (each digit is doubled, e.g., #F00 = #FF0000)</li>
+     *   <li>6-digit: {@code #RRGGBB}</li>
+     * </ul>
+     *
+     * @param hex the hexadecimal color string (e.g., "#FF0000" or "#F00")
+     * @return a new Rgb instance with the parsed color values
+     * @throws IllegalArgumentException if the format is invalid or contains non-hex characters
+     */
     public static Rgb fromHex(String hex) throws IllegalArgumentException {
         if (!hex.startsWith("#") || (hex.length() != 4 && hex.length() != 7)) {
             throw new IllegalArgumentException("Invalid hexadecimal color format, expected #RGB or #RRGGBB. Got: " + hex);
