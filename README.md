@@ -16,7 +16,14 @@ A modern, fluent Java library for styling terminal output with ANSI escape codes
 🎨 **Multiple Color Formats** - Basic ANSI, RGB values, and hex codes  
 🔄 **Reusable Styles** - Create once, apply to multiple texts  
 ⚡ **Zero Dependencies** - Lightweight with no external dependencies  
-🛡️ **Type Safe** - Compile-time safety with sealed classes  
+🛡️ **Type Safe** - Compile-time safety with sealed classes
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/f1cef061-8339-4807-a992-0d3075997a55" alt="Stylr Demo" width="650" />
+  <p><em>Stylr running on Windows Terminal</em></p>
+</div>
+<br>
 
 ## Quick Examples
 
@@ -42,7 +49,7 @@ int percent = 60;
 int filled = percent / 5;
 int empty = 20 - filled;
 
-String bar = progress.apply("█".repeat(filled)) + 
+String bar = progress.apply("█".repeat(filled)) +
              remaining.apply("░".repeat(empty));
 System.out.println("Progress: [" + bar + "] " + percent + "%");
 ```
@@ -69,24 +76,13 @@ System.out.println(warn.apply("[WARN]") + " Deprecated method");
 System.out.println(info.apply("[INFO]") + " Server started");
 ```
 
-### Status Indicators
-```java
-String online = Stylr.of("● Online").color(BasicColor.GREEN).render();
-String offline = Stylr.of("● Offline").color(BasicColor.RED).render();
-String pending = Stylr.of("● Pending").color(BasicColor.YELLOW).render();
-
-System.out.println("Database: " + online);
-System.out.println("Cache: " + offline);
-System.out.println("API: " + pending);
-```
-
 ## Installation
 
 Currently, you need to build Stylr from source as it's not yet published to Maven Central.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/stylr.git
+git clone https://github.com/bitmeshi/stylr.git
 cd stylr
 
 # Build the project
@@ -158,26 +154,9 @@ Standard terminal colors that work in all ANSI-compatible terminals:
 ```
 
 **Available Colors:**
-- Standard: 
-  - `BLACK`
-  - `RED`
-  - `GREEN`
-  - `YELLOW`
-  - `BLUE`
-  - `MAGENTA`
-  - `CYAN`
-  - `WHITE`
 
-
-- Bright: 
-  - `BRIGHT_BLACK`
-  - `BRIGHT_RED`
-  - `BRIGHT_GREEN`
-  - `BRIGHT_YELLOW`
-  - `BRIGHT_BLUE`
-  - `BRIGHT_MAGENTA`
-  - `BRIGHT_CYAN`
-  - `BRIGHT_WHITE`
+- **Standard:** `BLACK`, `RED`, `GREEN`, `YELLOW`, `BLUE`, `MAGENTA`, `CYAN`, `WHITE`
+- **Bright:** `BRIGHT_BLACK`, `BRIGHT_RED`, `BRIGHT_GREEN`, `BRIGHT_YELLOW`, `BRIGHT_BLUE`, `BRIGHT_MAGENTA`, `BRIGHT_CYAN`, `BRIGHT_WHITE`
 
 #### RGB Colors (0-255)
 Full color support with 24-bit RGB values:
@@ -371,7 +350,7 @@ String independent = Stylr.of("Independent")
 
 | Terminal | Basic Colors | RGB Colors | Notes |
 |----------|--------------|------------|-------|
-| Windows Terminal | ✅ | ✅ | Recommended |
+| Windows Terminal | ✅ | ✅ | Full support |
 | PowerShell 7+ | ✅ | ✅ | Full support |
 | Linux/Unix terminals | ✅ | ✅ | Full support |
 | macOS Terminal | ✅ | ✅ | Full support |
@@ -403,10 +382,10 @@ We welcome contributions to Stylr! Whether you're fixing bugs, adding features, 
    ```
 
 3. **Make your changes**
-   - Write clear, documented code
-   - Follow existing code style and conventions
-   - Add tests for new functionality
-   - Update documentation as needed
+    - Write clear, documented code
+    - Follow existing code style and conventions
+    - Add tests for new functionality
+    - Update documentation as needed
 
 4. **Test your changes**
    ```bash
@@ -421,9 +400,9 @@ We welcome contributions to Stylr! Whether you're fixing bugs, adding features, 
    ```
 
 6. **Submit a pull request**
-   - Describe your changes clearly
-   - Reference any related issues
-   - Ensure all tests pass
+    - Describe your changes clearly
+    - Reference any related issues
+    - Ensure all tests pass
 
 ### Development Guidelines
 
@@ -465,9 +444,9 @@ For feature requests, please describe:
 
 Stylr was inspired by terminal styling libraries from other languages:
 
-- **[chalk](https://github.com/chalk/chalk)** (JavaScript/Node.js) - The gold standard for terminal styling
-- **[colorama](https://github.com/tartley/colorama)** (Python) - Simple cross-platform colored terminal text
-- **[colored](https://github.com/mackwic/colored)** (Rust) - Elegant terminal colors with a fluent API
+- **[chalk](https://github.com/chalk/chalk)** (JavaScript/Node.js)
+- **[colorama](https://github.com/tartley/colorama)** (Python)
+- **[colored](https://github.com/mackwic/colored)** (Rust)
 
 Special thanks to:
 - The **Java community** for modern language features (sealed classes, records)
